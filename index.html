@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>貝雅工坊</title>
+<title>貝雅工坊 · 烏托邦：起源 助手</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -430,30 +430,21 @@ function render(){
 }
 
 /* ================= TAB 1: 熔爐計算 ================= */
-let calcSel = {recipeId:null, matQty:1, fuelName:null};
+let calcSel = {recipeId:null, matQty:1, wantQty:0, fuelName:null};
 let furnaceSearch = '';
 
 function renderFurnace(main){
   const filtered = state.recipes.filter(r=>r.name.toLowerCase().includes(furnaceSearch.toLowerCase()));
-  const recipeChips = filtered.length ? filtered.map(r=>`
-    <span class="recipe-chip ${calcSel.recipeId===r.id?'active':''}" onclick="pickRecipe('${r.id}')">
-      ${escapeHtml(r.name)} <span class="mono" style="opacity:.6">· ${r.time}秒／${r.inputQty}:${r.outputQty}</span>
-    </span>`).join('') : `<span style="color:var(--text-faint);font-size:12.5px;">找不到配方，點右邊「管理配方」新增一個。</span>`;
-
   const recipe = state.recipes.find(r=>r.id===calcSel.recipeId);
 
-  let totalTime=0, totalOutput=0, numBatches=0, fuelCount=0, fuel=null;
   if(recipe){
     if(calcSel.fuelName===null || !recipe.fuels.includes(calcSel.fuelName)){
       calcSel.fuelName = recipe.fuels[0] || null;
     }
-    numBatches = Math.ceil((calcSel.matQty||0) / recipe.inputQty);
-    totalTime = numBatches * recipe.time;
-    totalOutput = numBatches * recipe.outputQty;
-    fuel = state.fuels.find(f=>f.name===calcSel.fuelName);
-    fuelCount = fuel && fuel.seconds>0 ? Math.ceil(totalTime / fuel.seconds) : 0;
+    // 以目前的原料數量為基準，同步算出可取得的成品數量
+    const numBatches = Math.ceil((calcSel.matQty||0) / recipe.inputQty);
+    calcSel.wantQty = numBatches * recipe.outputQty;
   }
-  const gaugePct = totalTime>0 ? 100 : 0;
 
   const fuelOptions = recipe ? recipe.fuels.map(fname=>{
     const f = state.fuels.find(x=>x.name===fname);
@@ -464,7 +455,7 @@ function renderFurnace(main){
     <div class="page-head">
       <div class="eyebrow">Furnace Calculator</div>
       <h1>熔爐計算</h1>
-      <p>選一個配方、輸入你放入的原料數量，自動算出總煉製時間，以及需要幾份燃料</p>
+      <p>選一個配方，輸入「放入的原料數量」或「想取得的成品數量」其中一格，另一格會自動幫你算出來，同時算出總時間跟燃料需求。</p>
     </div>
 
     <div class="panel">
@@ -473,7 +464,7 @@ function renderFurnace(main){
         <input type="text" id="fr_search" placeholder="搜尋配方名稱…" value="${escapeHtml(furnaceSearch)}">
         <button onclick="openRecipeManager(null)">管理配方</button>
       </div>
-      <div>${recipeChips}</div>
+      <div id="recipeChipsWrap">${renderRecipeChips(filtered)}</div>
     </div>
 
     ${recipe ? `
@@ -482,32 +473,36 @@ function renderFurnace(main){
       <div class="row">
         <div class="field">
           <label>你放入的原料數量</label>
-          <input type="number" id="f_matqty" min="1" value="${calcSel.matQty}">
+          <input type="number" id="f_matqty" min="0" step="1" value="${calcSel.matQty}">
+        </div>
+        <div class="field">
+          <label>你想取得的成品數量</label>
+          <input type="number" id="f_wantqty" min="0" step="1" value="${calcSel.wantQty}">
         </div>
         <div class="field">
           <label>使用燃料</label>
           <select id="f_fueltype">${fuelOptions || '<option>此配方尚未設定可用燃料</option>'}</select>
         </div>
       </div>
-      <div class="disclaimer">每批消耗 ${recipe.inputQty} 個原料、產出 ${recipe.outputQty} 個成品，共需 ${numBatches} 批才能用完你輸入的原料數量。</div>
+      <div class="disclaimer" id="res_batches"></div>
     </div>
 
     <div class="panel">
       <h3>結果</h3>
       <div class="gauge-wrap">
-        <div class="gauge-track"><div class="gauge-fill" style="width:${gaugePct}%"></div></div>
+        <div class="gauge-track"><div class="gauge-fill" id="res_gauge" style="width:0%"></div></div>
         <div class="gauge-labels">
           <div class="stat">
-            <div class="num mono">${formatDuration(totalTime)}</div>
+            <div class="num mono" id="res_time">-</div>
             <div class="lbl">總煉製時間</div>
           </div>
           <div class="stat">
-            <div class="num mono">${totalOutput}</div>
+            <div class="num mono" id="res_output">-</div>
             <div class="lbl">總產出數量</div>
           </div>
           <div class="stat fuel">
-            <div class="num mono">${fuelCount} <span style="font-size:13px;opacity:.7">份</span></div>
-            <div class="lbl">${fuel?escapeHtml(fuel.name):'燃料'}需求</div>
+            <div class="num mono" id="res_fuel">-</div>
+            <div class="lbl" id="res_fuel_label">燃料需求</div>
           </div>
         </div>
       </div>
@@ -515,11 +510,74 @@ function renderFurnace(main){
     ` : `<div class="empty">先在上面選一個配方，就會顯示計算結果</div>`}
   `;
 
-  document.getElementById('fr_search').oninput = e=>{ furnaceSearch = e.target.value; render(); };
+  document.getElementById('fr_search').oninput = e=>{
+    furnaceSearch = e.target.value;
+    const list = state.recipes.filter(r=>r.name.toLowerCase().includes(furnaceSearch.toLowerCase()));
+    document.getElementById('recipeChipsWrap').innerHTML = renderRecipeChips(list);
+  };
   const mq = document.getElementById('f_matqty');
-  if(mq) mq.oninput = e=>{ calcSel.matQty = Math.max(0, parseFloat(e.target.value)||0); render(); };
+  if(mq) mq.oninput = e=>{
+    calcSel.matQty = Math.max(0, parseFloat(e.target.value)||0);
+    updateFurnaceResults('mat');
+  };
+  const wq = document.getElementById('f_wantqty');
+  if(wq) wq.oninput = e=>{
+    calcSel.wantQty = Math.max(0, parseFloat(e.target.value)||0);
+    updateFurnaceResults('want');
+  };
   const ft = document.getElementById('f_fueltype');
-  if(ft) ft.onchange = e=>{ calcSel.fuelName = e.target.value; render(); };
+  if(ft) ft.onchange = e=>{ calcSel.fuelName = e.target.value; updateFurnaceResults('mat'); };
+
+  if(recipe) updateFurnaceResults('mat', true);
+}
+
+function renderRecipeChips(list){
+  if(!list.length) return `<span style="color:var(--text-faint);font-size:12.5px;">找不到配方，點右邊「管理配方」新增一個。</span>`;
+  return list.map(r=>`
+    <span class="recipe-chip ${calcSel.recipeId===r.id?'active':''}" onclick="pickRecipe('${r.id}')">
+      ${escapeHtml(r.name)} <span class="mono" style="opacity:.6">· ${r.time}秒／${r.inputQty}:${r.outputQty}</span>
+    </span>`).join('');
+}
+
+/* 重新計算結果，只更新數字與另一格輸入值，不重繪整頁（避免輸入格失焦、一次只能打一個字） */
+function updateFurnaceResults(source, skipFieldSync){
+  const recipe = state.recipes.find(r=>r.id===calcSel.recipeId);
+  if(!recipe) return;
+
+  let numBatches;
+  if(source==='want'){
+    numBatches = Math.ceil((calcSel.wantQty||0) / recipe.outputQty);
+    calcSel.matQty = numBatches * recipe.inputQty;
+    if(!skipFieldSync){
+      const mq = document.getElementById('f_matqty');
+      if(mq) mq.value = calcSel.matQty;
+    }
+  }else{
+    numBatches = Math.ceil((calcSel.matQty||0) / recipe.inputQty);
+    calcSel.wantQty = numBatches * recipe.outputQty;
+    if(!skipFieldSync){
+      const wq = document.getElementById('f_wantqty');
+      if(wq) wq.value = calcSel.wantQty;
+    }
+  }
+
+  const totalTime = numBatches * recipe.time;
+  const totalOutput = numBatches * recipe.outputQty;
+  const fuel = state.fuels.find(f=>f.name===calcSel.fuelName);
+  const fuelCount = fuel && fuel.seconds>0 ? Math.ceil(totalTime / fuel.seconds) : 0;
+
+  const timeEl = document.getElementById('res_time');
+  const outEl = document.getElementById('res_output');
+  const fuelEl = document.getElementById('res_fuel');
+  const fuelLblEl = document.getElementById('res_fuel_label');
+  const gaugeEl = document.getElementById('res_gauge');
+  const batchEl = document.getElementById('res_batches');
+  if(timeEl) timeEl.textContent = formatDuration(totalTime);
+  if(outEl) outEl.textContent = totalOutput;
+  if(fuelEl) fuelEl.innerHTML = `${fuelCount} <span style="font-size:13px;opacity:.7">份</span>`;
+  if(fuelLblEl) fuelLblEl.textContent = `${fuel?fuel.name:'燃料'}需求`;
+  if(gaugeEl) gaugeEl.style.width = (totalTime>0?100:0)+'%';
+  if(batchEl) batchEl.textContent = `每批消耗 ${recipe.inputQty} 個原料、產出 ${recipe.outputQty} 個成品，共需 ${numBatches} 批。`;
 }
 
 function pickRecipe(id){
@@ -655,18 +713,6 @@ let lookbookQuery = '';
 
 function renderLookbook(main){
   const filtered = state.lookbook.filter(r=> r.name.toLowerCase().includes(lookbookQuery.toLowerCase()) );
-  const rows = filtered.length ? filtered.map(r=>`
-    <div class="list-row">
-      <div class="main">
-        <div class="title">${escapeHtml(r.name)} ${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
-        <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}</div>
-      </div>
-      <div class="acts">
-        <button class="small" onclick="useInCalc('${r.id}')">帶入計算</button>
-        <button class="small" onclick="editLookbook('${r.id}')">編輯</button>
-        <button class="small danger" onclick="deleteLookbook('${r.id}')">刪除</button>
-      </div>
-    </div>`).join('') : `<div class="empty">${state.lookbook.length? '找不到符合的配方':'配方庫是空的，新增第一筆配方吧'}</div>`;
 
   main.innerHTML = `
     <div class="page-head">
@@ -680,10 +726,29 @@ function renderLookbook(main){
         <input type="text" id="lb_search" placeholder="搜尋物品名稱…" value="${escapeHtml(lookbookQuery)}">
         <button class="primary" onclick="editLookbook(null)">+ 新增配方</button>
       </div>
-      ${rows}
+      <div id="lookbookListWrap">${renderLookbookRows(filtered)}</div>
     </div>
   `;
-  document.getElementById('lb_search').oninput = e=>{ lookbookQuery = e.target.value; render(); };
+  document.getElementById('lb_search').oninput = e=>{
+    lookbookQuery = e.target.value;
+    const list = state.lookbook.filter(r=> r.name.toLowerCase().includes(lookbookQuery.toLowerCase()) );
+    document.getElementById('lookbookListWrap').innerHTML = renderLookbookRows(list);
+  };
+}
+
+function renderLookbookRows(filtered){
+  return filtered.length ? filtered.map(r=>`
+    <div class="list-row">
+      <div class="main">
+        <div class="title">${escapeHtml(r.name)} ${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
+        <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}</div>
+      </div>
+      <div class="acts">
+        <button class="small" onclick="useInCalc('${r.id}')">帶入計算</button>
+        <button class="small" onclick="editLookbook('${r.id}')">編輯</button>
+        <button class="small danger" onclick="deleteLookbook('${r.id}')">刪除</button>
+      </div>
+    </div>`).join('') : `<div class="empty">${state.lookbook.length? '找不到符合的配方':'配方庫是空的，新增第一筆配方吧'}</div>`;
 }
 
 function useInCalc(id){
@@ -775,19 +840,7 @@ function renderMap(main){
     (mapFilter==='all'||m.cat===mapFilter) &&
     m.name.toLowerCase().includes(mapSearch.toLowerCase())
   );
-  const rows = visibleMarkers.length ? visibleMarkers.map(m=>{
-    const cat = CATS.find(c=>c.id===m.cat) || CATS[CATS.length-1];
-    return `<div class="list-row">
-      <div class="main">
-        <div class="title"><span class="tag moss">${cat.label}</span>${escapeHtml(m.name)}</div>
-        <div class="sub">${m.note?escapeHtml(m.note):'（無備註）'} · 座標 ${m.x.toFixed(0)},${m.y.toFixed(0)}</div>
-      </div>
-      <div class="acts">
-        <button class="small" onclick="editMarker('${m.id}')">編輯</button>
-        <button class="small danger" onclick="deleteMarker('${m.id}')">刪除</button>
-      </div>
-    </div>`;
-  }).join('') : `<div class="empty">${state.markers.length? '找不到符合的標記':'尚未標記任何資源點，點擊上方地圖新增第一個'}</div>`;
+  const rows = renderMarkerRows(visibleMarkers);
 
   main.innerHTML = `
     <div class="page-head">
@@ -806,7 +859,7 @@ function renderMap(main){
         <input type="text" id="map_search" placeholder="搜尋標記名稱…" value="${escapeHtml(mapSearch)}">
       </div>
       <div class="filterbar">${filterBtns}</div>
-      ${rows}
+      <div id="markerListWrap">${rows}</div>
     </div>
   `;
 
@@ -817,9 +870,29 @@ function renderMap(main){
     pendingPin = {x,y};
     editMarker(null);
   };
-  document.getElementById('map_search').oninput = e=>{ mapSearch=e.target.value; render(); };
+  document.getElementById('map_search').oninput = e=>{
+    mapSearch = e.target.value;
+    const list = state.markers.filter(m=>(mapFilter==='all'||m.cat===mapFilter) && m.name.toLowerCase().includes(mapSearch.toLowerCase()));
+    document.getElementById('markerListWrap').innerHTML = renderMarkerRows(list);
+  };
 }
 function setMapFilter(id){ mapFilter=id; render(); }
+
+function renderMarkerRows(visibleMarkers){
+  return visibleMarkers.length ? visibleMarkers.map(m=>{
+    const cat = CATS.find(c=>c.id===m.cat) || CATS[CATS.length-1];
+    return `<div class="list-row">
+      <div class="main">
+        <div class="title"><span class="tag moss">${cat.label}</span>${escapeHtml(m.name)}</div>
+        <div class="sub">${m.note?escapeHtml(m.note):'（無備註）'} · 座標 ${m.x.toFixed(0)},${m.y.toFixed(0)}</div>
+      </div>
+      <div class="acts">
+        <button class="small" onclick="editMarker('${m.id}')">編輯</button>
+        <button class="small danger" onclick="deleteMarker('${m.id}')">刪除</button>
+      </div>
+    </div>`;
+  }).join('') : `<div class="empty">${state.markers.length? '找不到符合的標記':'尚未標記任何資源點，點擊上方地圖新增第一個'}</div>`;
+}
 
 function editMarker(id){
   const m = id ? state.markers.find(x=>x.id===id) : {id:null, name:'', cat:'ore', note:'', x:pendingPin.x, y:pendingPin.y};
