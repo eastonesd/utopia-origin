@@ -1,11 +1,9 @@
-
-貝雅工坊 · HTML
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>貝雅工坊 · 烏托邦：起源 助手</title>
+<title>貝雅工坊</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Spectral:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
@@ -41,10 +39,10 @@
     min-height:100vh;
   }
   ::selection{background:var(--copper-dim);color:#fff;}
- 
+
   h1,h2,h3{font-family:'Spectral',serif;margin:0;font-weight:600;}
   .mono{font-family:'JetBrains Mono',monospace;}
- 
+
   /* layout */
   .shell{display:flex;min-height:100vh;}
   nav.side{
@@ -61,7 +59,7 @@
   }
   .brand .mark svg{flex:none;}
   .brand .sub{font-size:11px;color:var(--text-faint);margin-top:4px;letter-spacing:0.6px;text-transform:uppercase;}
- 
+
   .navitem{
     display:flex;align-items:center;gap:11px;
     padding:11px 20px;margin:2px 10px;border-radius:var(--radius);
@@ -82,13 +80,13 @@
   .navitem[data-tab="furnace"].active{color:var(--ember-glow);}
   .navitem[data-tab="lookbook"].active{color:var(--steel);}
   .navitem[data-tab="map"].active{color:var(--moss);}
- 
+
   main{flex:1;padding:36px 40px 60px 40px;max-width:1000px;}
   .page-head{margin-bottom:26px;}
   .page-head .eyebrow{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-faint);margin-bottom:6px;}
   .page-head h1{font-size:26px;}
   .page-head p{color:var(--text-dim);font-size:14px;margin-top:6px;max-width:60ch;line-height:1.6;}
- 
+
   .panel{
     background:var(--bg-panel);
     border:1px solid var(--border-soft);
@@ -97,7 +95,7 @@
     margin-bottom:20px;
   }
   .panel h3{font-size:15px;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
- 
+
   label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:5px;font-weight:500;}
   input[type=text],input[type=number],select,textarea{
     width:100%;background:var(--bg-inset);border:1px solid var(--border);color:var(--text);
@@ -109,7 +107,7 @@
   .field{margin-bottom:14px;}
   .row{display:flex;gap:14px;flex-wrap:wrap;}
   .row>.field{flex:1;min-width:140px;}
- 
+
   button{
     font-family:'Inter',sans-serif;font-weight:600;font-size:13.5px;
     border-radius:var(--radius);border:1px solid var(--border);
@@ -123,7 +121,7 @@
   button.danger:hover{border-color:var(--danger);color:var(--danger);}
   button.small{padding:5px 10px;font-size:12px;}
   button:disabled{opacity:.4;cursor:not-allowed;}
- 
+
   /* furnace calc */
   .gauge-wrap{background:var(--bg-inset);border:1px solid var(--border);border-radius:6px;padding:20px;margin-top:6px;}
   .gauge-track{
@@ -148,7 +146,7 @@
   .stat .num{font-family:'JetBrains Mono',monospace;font-size:22px;color:var(--ember-glow);font-weight:700;}
   .stat .lbl{font-size:11px;color:var(--text-faint);text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
   .stat.fuel .num{color:var(--copper);}
- 
+
   .recipe-chip{
     display:inline-flex;align-items:center;gap:6px;
     background:var(--bg-panel-2);border:1px solid var(--border);
@@ -157,7 +155,7 @@
   }
   .recipe-chip:hover{border-color:var(--copper);color:var(--text);}
   .recipe-chip.active{border-color:var(--copper);color:var(--copper);background:rgba(201,138,75,0.1);}
- 
+
   /* list rows */
   .list-row{
     display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -175,15 +173,15 @@
   .tag.steel{background:rgba(146,160,179,0.15);color:var(--steel);}
   .tag.moss{background:rgba(124,148,115,0.18);color:#a3c397;}
   .tag.copper{background:rgba(201,138,75,0.16);color:var(--copper);}
- 
+
   .empty{
     text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13.5px;
     border:1px dashed var(--border);border-radius:6px;
   }
- 
+
   .searchbar{display:flex;gap:10px;margin-bottom:14px;}
   .searchbar input{flex:1;}
- 
+
   /* modal */
   .modal-backdrop{
     position:fixed;inset:0;background:rgba(10,10,11,0.7);backdrop-filter:blur(2px);
@@ -197,7 +195,7 @@
   .mat-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
   .mat-row input{flex:1;}
   .mat-row input.qty{max-width:80px;flex:none;}
- 
+
   /* map */
   .map-area{
     position:relative;width:100%;aspect-ratio:16/10;border-radius:6px;overflow:hidden;
@@ -227,7 +225,7 @@
   .pin.cat-special{background:#c9a84b;}
   .pin.cat-chest{background:var(--steel);}
   .pin.cat-other{background:#8a8a92;}
- 
+
   .catlegend{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 4px 0;}
   .catlegend span{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-dim);}
   .catlegend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
@@ -237,14 +235,14 @@
   .catlegend .cat-special{background:#c9a84b;}
   .catlegend .cat-chest{background:var(--steel);}
   .catlegend .cat-other{background:#8a8a92;}
- 
+
   .filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
   .filterbtn{
     font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid var(--border);
     background:transparent;color:var(--text-dim);cursor:pointer;
   }
   .filterbtn.active{border-color:var(--moss);color:#a3c397;background:rgba(124,148,115,0.1);}
- 
+
   .toast{
     position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
     background:var(--bg-panel-2);border:1px solid var(--copper-dim);color:var(--text);
@@ -252,12 +250,12 @@
     transition:opacity .25s, transform .25s;z-index:100;
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
- 
+
   .disclaimer{
     font-size:11.5px;color:var(--text-faint);margin-top:10px;line-height:1.6;
     border-left:2px solid var(--border);padding-left:10px;
   }
- 
+
   /* mobile */
   .mobiletabs{display:none;}
   @media (max-width:760px){
@@ -274,7 +272,7 @@
 </style>
 </head>
 <body>
- 
+
 <div class="shell">
   <nav class="side" id="sideNav"></nav>
   <div style="flex:1;display:flex;flex-direction:column;">
@@ -282,9 +280,9 @@
     <main id="main"></main>
   </div>
 </div>
- 
+
 <div class="toast" id="toast"></div>
- 
+
 <script>
 /* ---------------- storage helpers (瀏覽器 localStorage，資料存在使用者自己的裝置上) ---------------- */
 const STORAGE_PREFIX = 'beiya-workshop:';
@@ -307,17 +305,49 @@ function toast(msg){
   t.textContent=msg; t.classList.add('show');
   clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),1800);
 }
- 
+
 /* ---------------- state ---------------- */
 let state = {
   tab: 'furnace',
-  recipes: [],   // {id,name,building,time,fuel}
-  fuels: [],     // {id,name,burn}
+  recipes: [],   // {id,name,time,inputQty,outputQty,fuels:[fuelName,...]}
+  fuels: [],     // {id,name,seconds}  -- 一份燃料能持續燃燒幾秒
   lookbook: [],  // {id,name,building,materials:[{name,qty}]}
   markers: [],   // {id,name,cat,x,y,note}
   loaded:false
 };
- 
+
+const SCHEMA_VERSION = 2;
+
+const DEFAULT_FUELS = [
+  {name:'茅草', seconds:60},
+  {name:'煤炭', seconds:180},
+  {name:'蒸氣石', seconds:300},
+  {name:'魔晶', seconds:31},
+];
+
+const DEFAULT_RECIPES = [
+  {name:'石灰', time:3, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'水泥', time:3, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'玻璃', time:3, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'磚頭', time:3, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'鐵錠', time:10, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'銀錠', time:10, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'金錠', time:15, inputQty:1, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'水晶', time:20, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'黑曜石', time:30, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'瓦雷亞石', time:35, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'深海鋼錠', time:30, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'精煉鋼鐵', time:90, inputQty:10, outputQty:1, fuels:['蒸氣石']},
+  {name:'精煉橡膠', time:90, inputQty:10, outputQty:1, fuels:['蒸氣石']},
+  {name:'精煉煤炭', time:90, inputQty:10, outputQty:1, fuels:['蒸氣石']},
+  {name:'黏土', time:100, inputQty:1, outputQty:50, fuels:['魔晶']},
+  {name:'沙子', time:100, inputQty:1, outputQty:50, fuels:['魔晶']},
+  {name:'木頭', time:15, inputQty:1, outputQty:50, fuels:['魔晶']},
+  {name:'樹脂', time:210, inputQty:1, outputQty:50, fuels:['魔晶']},
+  {name:'石頭', time:21, inputQty:1, outputQty:50, fuels:['魔晶']},
+  {name:'海獸骸骨', time:420, inputQty:1, outputQty:50, fuels:['魔晶']},
+];
+
 const CATS = [
   {id:'ore',label:'礦石／礦脈',cls:'cat-ore'},
   {id:'plant',label:'植物／草藥',cls:'cat-plant'},
@@ -326,26 +356,31 @@ const CATS = [
   {id:'chest',label:'寶箱／遺跡',cls:'cat-chest'},
   {id:'other',label:'其他',cls:'cat-other'},
 ];
- 
+
 async function init(){
+  const schemaVersion = await loadKey('schemaVersion', 0);
   state.recipes  = await loadKey('recipes', []);
-  state.fuels    = await loadKey('fuels', null);
+  state.fuels    = await loadKey('fuels', []);
   state.lookbook = await loadKey('lookbook', []);
   state.markers  = await loadKey('markers', []);
- 
-  if(state.fuels === null){
-    // seed known fuel types from the game (茅草/木頭/煤). burn value is a placeholder — user should tune it.
-    state.fuels = [
-      {id:uid(), name:'茅草', burn:1},
-      {id:uid(), name:'木頭', burn:2},
-      {id:uid(), name:'煤',   burn:4},
-    ];
-    await saveKey('fuels', state.fuels);
+
+  if(schemaVersion < SCHEMA_VERSION){
+    // 資料結構升級：套用新版預設燃料燃燒時間與配方（僅在使用者尚未自行建立資料，或版本落後時寫入）
+    if(state.fuels.length===0 || !state.fuels[0].seconds){
+      state.fuels = DEFAULT_FUELS.map(f=>({id:uid(), ...f}));
+      await saveKey('fuels', state.fuels);
+    }
+    if(state.recipes.length===0 || state.recipes[0].fuel!==undefined){
+      state.recipes = DEFAULT_RECIPES.map(r=>({id:uid(), ...r}));
+      await saveKey('recipes', state.recipes);
+    }
+    await saveKey('schemaVersion', SCHEMA_VERSION);
   }
+
   state.loaded = true;
   render();
 }
- 
+
 /* ---------------- nav ---------------- */
 const NAV_ICONS = {
   furnace: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2c-1 3-4 4.5-4 8a4 4 0 0 0 8 0c0-1.2-.4-2-1-2.7.1 1-.3 1.7-1 1.7-1 0-1-1-1-1.7 0-1.3-.6-2.4-1-3.3Z"/><path d="M6 14a6 6 0 0 0 12 0"/><path d="M4 20h16"/></svg>',
@@ -353,13 +388,13 @@ const NAV_ICONS = {
   map: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4 3 6.5v14L9 18l6 2.5 6-2.5v-14L15 6.5 9 4Zm0 0v14m6-11.5V17"/></svg>'
 };
 const NAV_LABELS = {furnace:'熔爐計算',lookbook:'配方查詢',map:'地圖標記'};
- 
+
 function renderNav(){
   const items = ['furnace','lookbook','map'].map(id=>`
     <div class="navitem ${state.tab===id?'active':''}" data-tab="${id}" onclick="setTab('${id}')">
       ${NAV_ICONS[id]}<span>${NAV_LABELS[id]}</span>
     </div>`).join('');
- 
+
   document.getElementById('sideNav').innerHTML = `
     <div class="brand">
       <div class="mark">
@@ -379,11 +414,11 @@ function renderNav(){
 }
 async function resetAllData(){
   if(!confirm('確定要清除所有配方、燃料設定與地圖標記嗎？此動作無法復原。')) return;
-  ['recipes','fuels','lookbook','markers'].forEach(k=>localStorage.removeItem(STORAGE_PREFIX+k));
+  ['recipes','fuels','lookbook','markers','schemaVersion'].forEach(k=>localStorage.removeItem(STORAGE_PREFIX+k));
   location.reload();
 }
 function setTab(t){ state.tab=t; render(); }
- 
+
 /* ---------------- render root ---------------- */
 function render(){
   renderNav();
@@ -393,123 +428,189 @@ function render(){
   if(state.tab==='lookbook') renderLookbook(main);
   if(state.tab==='map') renderMap(main);
 }
- 
+
 /* ================= TAB 1: 熔爐計算 ================= */
-let calcSel = {recipeId:null, qty:10, time:0, fuel:0, fuelId:null};
- 
+let calcSel = {recipeId:null, matQty:1, fuelName:null};
+let furnaceSearch = '';
+
 function renderFurnace(main){
-  if(calcSel.fuelId===null && state.fuels[0]) calcSel.fuelId = state.fuels[0].id;
- 
-  const recipeChips = state.recipes.length ? state.recipes.map(r=>`
+  const filtered = state.recipes.filter(r=>r.name.toLowerCase().includes(furnaceSearch.toLowerCase()));
+  const recipeChips = filtered.length ? filtered.map(r=>`
     <span class="recipe-chip ${calcSel.recipeId===r.id?'active':''}" onclick="pickRecipe('${r.id}')">
-      ${escapeHtml(r.name)} <span class="mono" style="opacity:.6">·${r.time}s/顆</span>
-    </span>`).join('') : `<span style="color:var(--text-faint);font-size:12.5px;">尚未建立任何配方，可在下方手動輸入，或到「配方庫」新增。</span>`;
- 
-  const fuelOptions = state.fuels.map(f=>`<option value="${f.id}" ${calcSel.fuelId===f.id?'selected':''}>${escapeHtml(f.name)}（燃燒值 ${f.burn}）</option>`).join('');
- 
-  const totalTimeSec = calcSel.time * calcSel.qty;
-  const totalFuelVal = calcSel.fuel * calcSel.qty;
-  const fuel = state.fuels.find(f=>f.id===calcSel.fuelId);
-  const fuelCount = fuel && fuel.burn>0 ? Math.ceil(totalFuelVal / fuel.burn) : 0;
-  const gaugePct = Math.min(100, totalTimeSec>0 ? 100 : 0);
- 
+      ${escapeHtml(r.name)} <span class="mono" style="opacity:.6">· ${r.time}秒／${r.inputQty}:${r.outputQty}</span>
+    </span>`).join('') : `<span style="color:var(--text-faint);font-size:12.5px;">找不到配方，點右邊「管理配方」新增一個。</span>`;
+
+  const recipe = state.recipes.find(r=>r.id===calcSel.recipeId);
+
+  let totalTime=0, totalOutput=0, numBatches=0, fuelCount=0, fuel=null;
+  if(recipe){
+    if(calcSel.fuelName===null || !recipe.fuels.includes(calcSel.fuelName)){
+      calcSel.fuelName = recipe.fuels[0] || null;
+    }
+    numBatches = Math.ceil((calcSel.matQty||0) / recipe.inputQty);
+    totalTime = numBatches * recipe.time;
+    totalOutput = numBatches * recipe.outputQty;
+    fuel = state.fuels.find(f=>f.name===calcSel.fuelName);
+    fuelCount = fuel && fuel.seconds>0 ? Math.ceil(totalTime / fuel.seconds) : 0;
+  }
+  const gaugePct = totalTime>0 ? 100 : 0;
+
+  const fuelOptions = recipe ? recipe.fuels.map(fname=>{
+    const f = state.fuels.find(x=>x.name===fname);
+    return `<option value="${escapeHtml(fname)}" ${calcSel.fuelName===fname?'selected':''}>${escapeHtml(fname)}${f?`（每份燒 ${f.seconds} 秒）`:'（尚未設定燃燒秒數）'}</option>`;
+  }).join('') : '';
+
   main.innerHTML = `
     <div class="page-head">
       <div class="eyebrow">Furnace Calculator</div>
       <h1>熔爐計算</h1>
-      <p>輸入本次要煉製的材料數量，自動換算需要的總時間與燃料消耗。可先在下方建立常用配方，之後一鍵套用。</p>
+      <p>選一個配方、輸入你放入的原料數量，自動算出總煉製時間，以及需要幾份燃料</p>
     </div>
- 
+
     <div class="panel">
-      <h3>快速套用配方</h3>
+      <h3>選擇配方</h3>
+      <div class="searchbar" style="margin-bottom:10px;">
+        <input type="text" id="fr_search" placeholder="搜尋配方名稱…" value="${escapeHtml(furnaceSearch)}">
+        <button onclick="openRecipeManager(null)">管理配方</button>
+      </div>
       <div>${recipeChips}</div>
     </div>
- 
+
+    ${recipe ? `
     <div class="panel">
-      <h3>本次煉製設定</h3>
+      <h3>${escapeHtml(recipe.name)} <span class="tag copper">${recipe.time}秒／批</span><span class="tag steel">${recipe.inputQty}:${recipe.outputQty}</span></h3>
       <div class="row">
         <div class="field">
-          <label>物品名稱</label>
-          <input type="text" id="f_name" value="${escapeHtml(calcSel.name||'')}" placeholder="例如：鐵錠">
-        </div>
-        <div class="field">
-          <label>煉製數量</label>
-          <input type="number" id="f_qty" min="1" value="${calcSel.qty}">
-        </div>
-      </div>
-      <div class="row">
-        <div class="field">
-          <label>每顆所需時間（秒）</label>
-          <input type="number" id="f_time" min="0" step="0.1" value="${calcSel.time}">
-        </div>
-        <div class="field">
-          <label>每顆所需燃料值</label>
-          <input type="number" id="f_fuel" min="0" step="0.1" value="${calcSel.fuel}">
+          <label>你放入的原料數量</label>
+          <input type="number" id="f_matqty" min="1" value="${calcSel.matQty}">
         </div>
         <div class="field">
           <label>使用燃料</label>
-          <select id="f_fueltype">${fuelOptions || '<option>尚無燃料，請先新增</option>'}</select>
+          <select id="f_fueltype">${fuelOptions || '<option>此配方尚未設定可用燃料</option>'}</select>
         </div>
       </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button class="primary" onclick="calcApply()">計算</button>
-        <button class="ghost" onclick="calcSaveAsRecipe()">另存為配方</button>
-        <button class="ghost" onclick="openFuelManager()">管理燃料種類</button>
-      </div>
-      <div class="disclaimer">每顆時間／燃料值需要你自己在遊戲內實測填入（不同礦物、不同熔爐等級會不同），這裡只負責幫你把數量乘出來。</div>
+      <div class="disclaimer">每批消耗 ${recipe.inputQty} 個原料、產出 ${recipe.outputQty} 個成品，共需 ${numBatches} 批才能用完你輸入的原料數量。</div>
     </div>
- 
+
     <div class="panel">
       <h3>結果</h3>
       <div class="gauge-wrap">
         <div class="gauge-track"><div class="gauge-fill" style="width:${gaugePct}%"></div></div>
         <div class="gauge-labels">
           <div class="stat">
-            <div class="num mono">${formatDuration(totalTimeSec)}</div>
+            <div class="num mono">${formatDuration(totalTime)}</div>
             <div class="lbl">總煉製時間</div>
+          </div>
+          <div class="stat">
+            <div class="num mono">${totalOutput}</div>
+            <div class="lbl">總產出數量</div>
           </div>
           <div class="stat fuel">
             <div class="num mono">${fuelCount} <span style="font-size:13px;opacity:.7">份</span></div>
-            <div class="lbl">${fuel?escapeHtml(fuel.name):'燃料'}需求（共燃料值 ${totalFuelVal.toFixed(1)}）</div>
+            <div class="lbl">${fuel?escapeHtml(fuel.name):'燃料'}需求</div>
           </div>
         </div>
       </div>
     </div>
+    ` : `<div class="empty">先在上面選一個配方，就會顯示計算結果</div>`}
   `;
- 
-  document.getElementById('f_qty').oninput = e=>calcSel.qty = Math.max(1, parseFloat(e.target.value)||1);
-  document.getElementById('f_time').oninput = e=>calcSel.time = parseFloat(e.target.value)||0;
-  document.getElementById('f_fuel').oninput = e=>calcSel.fuel = parseFloat(e.target.value)||0;
-  document.getElementById('f_name').oninput = e=>calcSel.name = e.target.value;
+
+  document.getElementById('fr_search').oninput = e=>{ furnaceSearch = e.target.value; render(); };
+  const mq = document.getElementById('f_matqty');
+  if(mq) mq.oninput = e=>{ calcSel.matQty = Math.max(0, parseFloat(e.target.value)||0); render(); };
   const ft = document.getElementById('f_fueltype');
-  if(ft) ft.onchange = e=>{ calcSel.fuelId = e.target.value; render(); };
+  if(ft) ft.onchange = e=>{ calcSel.fuelName = e.target.value; render(); };
 }
- 
+
 function pickRecipe(id){
-  const r = state.recipes.find(x=>x.id===id);
-  if(!r) return;
-  calcSel = {...calcSel, recipeId:id, name:r.name, time:r.time, fuel:r.fuel};
+  calcSel.recipeId = id;
+  calcSel.fuelName = null;
   render();
 }
-function calcApply(){ render(); toast('已計算'); }
-async function calcSaveAsRecipe(){
-  if(!calcSel.name){ toast('請先填寫物品名稱'); return; }
-  state.recipes.push({id:uid(), name:calcSel.name, building:'', time:calcSel.time, fuel:calcSel.fuel});
+
+/* ---- 配方管理彈窗（新增／編輯／刪除／管理燃料燒秒數） ---- */
+function openRecipeManager(editId){
+  const editing = editId ? state.recipes.find(r=>r.id===editId) : null;
+  const listHtml = state.recipes.map(r=>`
+    <div class="list-row">
+      <div class="main">
+        <div class="title">${escapeHtml(r.name)}</div>
+        <div class="sub">${r.time}秒／批 · 原料:產物 = ${r.inputQty}:${r.outputQty} · 燃料：${r.fuels.map(escapeHtml).join('、')||'（無）'}</div>
+      </div>
+      <div class="acts">
+        <button class="small" onclick="openRecipeManager('${r.id}')">編輯</button>
+        <button class="small danger" onclick="deleteRecipe('${r.id}')">刪除</button>
+      </div>
+    </div>`).join('') || `<div class="empty">尚無配方</div>`;
+
+  const fuelChecks = state.fuels.map(f=>`
+    <label style="display:flex;align-items:center;gap:6px;font-weight:400;font-size:13px;color:var(--text);margin-bottom:6px;">
+      <input type="checkbox" class="fuel-check" value="${escapeHtml(f.name)}" ${editing && editing.fuels.includes(f.name)?'checked':''} style="width:auto;">
+      ${escapeHtml(f.name)}（${f.seconds}秒／份）
+    </label>`).join('') || `<div style="font-size:12.5px;color:var(--text-faint);">尚無燃料，請先到下方新增</div>`;
+
+  showModal(`
+    <h3>${editing?'編輯配方':'配方管理'}</h3>
+    <div style="max-height:180px;overflow:auto;border:1px solid var(--border-soft);border-radius:6px;padding:0 8px;margin-bottom:16px;">
+      ${editing ? '' : listHtml}
+    </div>
+    <h3 style="font-size:14px;margin-bottom:10px;">${editing?'編輯此配方':'新增配方'}</h3>
+    <div class="field"><label>物品名稱</label><input type="text" id="rc_name" value="${escapeHtml(editing?editing.name:'')}" placeholder="例如：鐵錠"></div>
+    <div class="row">
+      <div class="field"><label>每批所需時間（秒）</label><input type="number" id="rc_time" min="0" step="0.1" value="${editing?editing.time:''}"></div>
+      <div class="field"><label>原料：產物比例</label>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input type="number" id="rc_in" min="0.01" step="0.01" value="${editing?editing.inputQty:1}" style="width:70px;">
+          <span class="mono">:</span>
+          <input type="number" id="rc_out" min="0.01" step="0.01" value="${editing?editing.outputQty:1}" style="width:70px;">
+        </div>
+      </div>
+    </div>
+    <div class="field"><label>可用燃料</label>${fuelChecks}</div>
+    <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap;">
+      <button class="primary" onclick="saveRecipe('${editId||''}')">${editing?'儲存變更':'新增配方'}</button>
+      ${editing?`<button class="ghost" onclick="openRecipeManager(null)">返回列表</button>`:''}
+      <button class="ghost" onclick="openFuelManager()">管理燃料燒幾秒</button>
+      <button class="ghost" onclick="closeModal()">關閉</button>
+    </div>
+  `);
+}
+async function saveRecipe(editId){
+  const name = document.getElementById('rc_name').value.trim();
+  if(!name){ toast('請填寫物品名稱'); return; }
+  const time = parseFloat(document.getElementById('rc_time').value)||0;
+  const inputQty = parseFloat(document.getElementById('rc_in').value)||1;
+  const outputQty = parseFloat(document.getElementById('rc_out').value)||1;
+  const fuels = [...document.querySelectorAll('.fuel-check:checked')].map(c=>c.value);
+  if(editId){
+    const r = state.recipes.find(x=>x.id===editId);
+    Object.assign(r, {name,time,inputQty,outputQty,fuels});
+  }else{
+    state.recipes.push({id:uid(), name, time, inputQty, outputQty, fuels});
+  }
   await saveKey('recipes', state.recipes);
-  toast('已加入配方庫');
+  toast('已儲存');
+  openRecipeManager(null);
   render();
 }
- 
-/* fuel manager modal */
+async function deleteRecipe(id){
+  state.recipes = state.recipes.filter(r=>r.id!==id);
+  if(calcSel.recipeId===id) calcSel.recipeId=null;
+  await saveKey('recipes', state.recipes);
+  openRecipeManager(null);
+}
+
+/* fuel manager modal — 每份燃料能持續燃燒幾秒 */
 function openFuelManager(){
   const rows = state.fuels.map(f=>`
     <div class="mat-row">
       <input type="text" value="${escapeHtml(f.name)}" data-fid="${f.id}" data-field="name">
-      <input type="number" class="qty" value="${f.burn}" data-fid="${f.id}" data-field="burn">
+      <input type="number" class="qty" value="${f.seconds}" data-fid="${f.id}" data-field="seconds" title="燃燒秒數">
       <button class="small danger" onclick="removeFuel('${f.id}')">刪</button>
     </div>`).join('');
   showModal(`
     <h3>管理燃料種類</h3>
+    <div style="font-size:11.5px;color:var(--text-faint);margin-bottom:10px;">右邊數字是「一份燃料能持續燃燒幾秒」</div>
     <div id="fuelRows">${rows || '<div class="empty">尚無燃料</div>'}</div>
     <button class="ghost small" style="margin-top:8px;" onclick="addFuelRow()">+ 新增燃料</button>
     <div style="display:flex;gap:10px;margin-top:18px;">
@@ -524,7 +625,7 @@ function addFuelRow(){
   const div = document.createElement('div');
   div.className='mat-row';
   div.innerHTML = `<input type="text" placeholder="燃料名稱" data-fid="${id}" data-field="name">
-    <input type="number" class="qty" placeholder="燃燒值" value="1" data-fid="${id}" data-field="burn">
+    <input type="number" class="qty" placeholder="燃燒秒數" value="60" data-fid="${id}" data-field="seconds">
     <button class="small danger" onclick="this.parentElement.remove()">刪</button>`;
   wrap.appendChild(div);
 }
@@ -537,10 +638,10 @@ async function saveFuelManager(){
   const byId = {};
   rows.forEach(row=>{
     const nameInput = row.querySelector('[data-field="name"]');
-    const burnInput = row.querySelector('[data-field="burn"]');
+    const secInput = row.querySelector('[data-field="seconds"]');
     const fid = nameInput.dataset.fid;
     if(!nameInput.value.trim()) return;
-    byId[fid] = {id: fid.startsWith('new-')?uid():fid, name:nameInput.value.trim(), burn:parseFloat(burnInput.value)||1};
+    byId[fid] = {id: fid.startsWith('new-')?uid():fid, name:nameInput.value.trim(), seconds:parseFloat(secInput.value)||1};
   });
   state.fuels = Object.values(byId);
   await saveKey('fuels', state.fuels);
@@ -548,10 +649,10 @@ async function saveFuelManager(){
   toast('燃料已更新');
   render();
 }
- 
+
 /* ================= TAB 2: 配方查詢 ================= */
 let lookbookQuery = '';
- 
+
 function renderLookbook(main){
   const filtered = state.lookbook.filter(r=> r.name.toLowerCase().includes(lookbookQuery.toLowerCase()) );
   const rows = filtered.length ? filtered.map(r=>`
@@ -566,14 +667,14 @@ function renderLookbook(main){
         <button class="small danger" onclick="deleteLookbook('${r.id}')">刪除</button>
       </div>
     </div>`).join('') : `<div class="empty">${state.lookbook.length? '找不到符合的配方':'配方庫是空的，新增第一筆配方吧'}</div>`;
- 
+
   main.innerHTML = `
     <div class="page-head">
       <div class="eyebrow">Recipe Lookbook</div>
       <h1>配方查詢</h1>
       <p>把你在遊戲中發現的製作配方記錄下來，之後直接搜尋查詢，或一鍵帶入熔爐計算機。</p>
     </div>
- 
+
     <div class="panel">
       <div class="searchbar">
         <input type="text" id="lb_search" placeholder="搜尋物品名稱…" value="${escapeHtml(lookbookQuery)}">
@@ -584,15 +685,23 @@ function renderLookbook(main){
   `;
   document.getElementById('lb_search').oninput = e=>{ lookbookQuery = e.target.value; render(); };
 }
- 
+
 function useInCalc(id){
   const r = state.lookbook.find(x=>x.id===id);
   if(!r) return;
-  calcSel = {...calcSel, name:r.name, recipeId:null};
+  const match = state.recipes.find(x=>x.name===r.name);
+  furnaceSearch = r.name;
+  if(match){
+    calcSel.recipeId = match.id;
+    calcSel.fuelName = null;
+    toast('已帶入熔爐計算');
+  }else{
+    calcSel.recipeId = null;
+    toast('熔爐計算裡還沒有這個配方，可到「管理配方」新增');
+  }
   setTab('furnace');
-  toast('已帶入物品名稱，請填入時間／燃料值');
 }
- 
+
 function editLookbook(id){
   const r = id ? state.lookbook.find(x=>x.id===id) : {id:null,name:'',building:'',materials:[{name:'',qty:1}]};
   const matRows = r.materials.map((m,i)=>`
@@ -601,7 +710,7 @@ function editLookbook(id){
       <input type="number" class="qty m-qty" placeholder="數量" value="${m.qty}">
       <button class="small danger" onclick="this.parentElement.remove()">刪</button>
     </div>`).join('');
- 
+
   showModal(`
     <h3>${id?'編輯配方':'新增配方'}</h3>
     <div class="field"><label>成品名稱</label><input type="text" id="lb_name" value="${escapeHtml(r.name)}" placeholder="例如：鋼板"></div>
@@ -632,7 +741,7 @@ async function saveLookbook(id){
     name: row.querySelector('.m-name').value.trim(),
     qty: parseFloat(row.querySelector('.m-qty').value)||1
   })).filter(m=>m.name);
- 
+
   if(id){
     const r = state.lookbook.find(x=>x.id===id);
     r.name=name; r.building=building; r.materials=materials;
@@ -647,21 +756,21 @@ async function deleteLookbook(id){
   await saveKey('lookbook', state.lookbook);
   render();
 }
- 
+
 /* ================= TAB 3: 地圖標記 ================= */
 let mapFilter = 'all';
 let mapSearch = '';
 let pendingPin = null; // {x,y}
- 
+
 function renderMap(main){
   const legend = CATS.map(c=>`<span><i class="${c.cls}"></i>${c.label}</span>`).join('');
   const filterBtns = `<button class="filterbtn ${mapFilter==='all'?'active':''}" onclick="setMapFilter('all')">全部</button>` +
     CATS.map(c=>`<button class="filterbtn ${mapFilter===c.id?'active':''}" onclick="setMapFilter('${c.id}')">${c.label}</button>`).join('');
- 
+
   const pins = state.markers.map(m=>`
     <div class="pin cat-${m.cat}" style="left:${m.x}%;top:${m.y}%;" title="${escapeHtml(m.name)}" onclick="event.stopPropagation();editMarker('${m.id}')"></div>
   `).join('');
- 
+
   const visibleMarkers = state.markers.filter(m=>
     (mapFilter==='all'||m.cat===mapFilter) &&
     m.name.toLowerCase().includes(mapSearch.toLowerCase())
@@ -679,19 +788,19 @@ function renderMap(main){
       </div>
     </div>`;
   }).join('') : `<div class="empty">${state.markers.length? '找不到符合的標記':'尚未標記任何資源點，點擊上方地圖新增第一個'}</div>`;
- 
+
   main.innerHTML = `
     <div class="page-head">
       <div class="eyebrow">Resource Map</div>
       <h1>地圖標記</h1>
       <p>這是一張自由座標圖，不是遊戲實際地圖 — 直接點擊來標出資源點的相對位置，方便自己記錄與查找。</p>
     </div>
- 
+
     <div class="panel">
       <div class="map-area" id="mapArea">${pins}<div class="hint">點擊空白處新增標記</div></div>
       <div class="catlegend">${legend}</div>
     </div>
- 
+
     <div class="panel">
       <div class="searchbar">
         <input type="text" id="map_search" placeholder="搜尋標記名稱…" value="${escapeHtml(mapSearch)}">
@@ -700,7 +809,7 @@ function renderMap(main){
       ${rows}
     </div>
   `;
- 
+
   document.getElementById('mapArea').onclick = e=>{
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX-rect.left)/rect.width)*100;
@@ -711,7 +820,7 @@ function renderMap(main){
   document.getElementById('map_search').oninput = e=>{ mapSearch=e.target.value; render(); };
 }
 function setMapFilter(id){ mapFilter=id; render(); }
- 
+
 function editMarker(id){
   const m = id ? state.markers.find(x=>x.id===id) : {id:null, name:'', cat:'ore', note:'', x:pendingPin.x, y:pendingPin.y};
   const catOptions = CATS.map(c=>`<option value="${c.id}" ${m.cat===c.id?'selected':''}>${c.label}</option>`).join('');
@@ -746,7 +855,7 @@ async function deleteMarker(id){
   await saveKey('markers', state.markers);
   render();
 }
- 
+
 /* ---------------- shared modal ---------------- */
 function showModal(html){
   const bd = document.createElement('div');
@@ -760,7 +869,7 @@ function closeModal(){
   const bd = document.getElementById('modalBackdrop');
   if(bd) bd.remove();
 }
- 
+
 /* ---------------- utils ---------------- */
 function formatDuration(sec){
   sec = Math.round(sec);
@@ -777,7 +886,7 @@ function formatDuration(sec){
 function escapeHtml(str){
   return (str||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
- 
+
 init();
 </script>
 </body>
