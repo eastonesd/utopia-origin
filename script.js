@@ -123,7 +123,6 @@ function renderNav(){
       <button class="ghost danger small" style="width:100%;" onclick="resetAllData()">清除所有資料</button>
     </div>
   `;
-  document.getElementById('sideNav').style.display='flex';
   document.getElementById('mobileNav').innerHTML = items;
 }
 async function resetAllData(){
