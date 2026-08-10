@@ -255,8 +255,25 @@
     .mobiletabs{
       display:flex;position:sticky;top:0;z-index:10;
       background:var(--bg-panel);border-bottom:1px solid var(--border-soft);
+      overflow-x:auto;
     }
-    .mobiletabs .navitem{flex:1;justify-content:center;margin:6px 4px;}
-    main{padding:22px 16px 50px 16px;}
+    .mobiletabs .navitem{flex:1;justify-content:center;margin:6px 4px;white-space:nowrap;}
+    main{padding:18px 14px 44px 14px;}
     .row{flex-direction:column;}
+    .page-head h1{font-size:21px;}
+    .page-head p{font-size:13px;}
+    .panel{padding:16px 14px;}
+    .gauge-labels{flex-wrap:wrap;gap:14px;}
+    .gauge-labels .stat{flex:1 1 40%;min-width:110px;}
+    .stat .num{font-size:19px;}
+    .searchbar{flex-wrap:wrap;}
+    .searchbar input{min-width:0;}
+    .modal{padding:18px;}
+    .list-row{flex-wrap:wrap;}
+    .list-row .acts{width:100%;justify-content:flex-end;}
+  }
+  @media (max-width:420px){
+    .brand .mark{font-size:17px;}
+    .page-head h1{font-size:19px;}
+    button{padding:8px 12px;font-size:13px;}
   }
