@@ -1,4 +1,4 @@
-  :root{
+:root{
     --bg:#17171a;
     --bg-panel:#202024;
     --bg-panel-2:#28282e;
@@ -253,11 +253,16 @@
     .shell{flex-direction:column;}
     nav.side{display:none;}
     .mobiletabs{
-      display:flex;position:sticky;top:0;z-index:10;
+      display:flex;flex-direction:column;position:sticky;top:0;z-index:10;
       background:var(--bg-panel);border-bottom:1px solid var(--border-soft);
-      overflow-x:auto;
     }
-    .mobiletabs .navitem{flex:1;justify-content:center;margin:6px 4px;white-space:nowrap;}
+    .mobile-brand{
+      display:flex;align-items:center;gap:8px;
+      padding:10px 14px;border-bottom:1px solid var(--border-soft);
+      font-family:'Spectral',serif;font-weight:700;font-size:15px;color:var(--text);
+    }
+    .mobile-tabs-row{display:flex;overflow-x:auto;}
+    .mobile-tabs-row .navitem{flex:1;justify-content:center;margin:6px 4px;white-space:nowrap;}
     main{padding:18px 14px 44px 14px;}
     .row{flex-direction:column;}
     .page-head h1{font-size:21px;}

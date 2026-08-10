@@ -122,7 +122,13 @@ function renderNav(){
       <button class="ghost danger small" style="width:100%;" onclick="resetAllData()">清除所有資料</button>
     </div>
   `;
-  document.getElementById('mobileNav').innerHTML = items;
+  document.getElementById('mobileNav').innerHTML = `
+    <div class="mobile-brand">
+      <img src="logo/logo-mark.svg" alt="貝雅工坊" width="22" height="22" style="border-radius:5px;flex:none;">
+      <span>貝雅工坊</span>
+    </div>
+    <div class="mobile-tabs-row">${items}</div>
+  `;
 }
 async function resetAllData(){
   if(!confirm('確定要清除所有配方、燃料設定與地圖標記嗎？此動作無法復原。')) return;
@@ -430,13 +436,13 @@ function renderLookbook(main){
   main.innerHTML = `
     <div class="page-head">
       <div class="eyebrow">Recipe Lookbook</div>
-      <h1>食譜查詢</h1>
-      <p>把你在遊戲中發現的食譜記錄下來，之後直接搜尋查詢，或一鍵帶入。</p>
+      <h1食譜查詢</h1>
+      <p>把你在遊戲中發現的食譜記錄下來，之後直接搜尋查詢，或一鍵帶入</p>
     </div>
 
     <div class="panel">
       <div class="searchbar">
-        <input type="text" id="lb_search" placeholder="搜尋食譜名稱…" value="${escapeHtml(lookbookQuery)}">
+        <input type="text" id="lb_search" placeholder="搜尋物品名稱…" value="${escapeHtml(lookbookQuery)}">
         <button class="primary" onclick="editLookbook(null)">+ 新增食譜</button>
       </div>
       <div id="lookbookListWrap">${renderLookbookRows(filtered)}</div>
@@ -454,7 +460,7 @@ function renderLookbookRows(filtered){
     <div class="list-row">
       <div class="main">
         <div class="title">${escapeHtml(r.name)} ${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
-        <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫食材）'}</div>
+        <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}</div>
       </div>
       <div class="acts">
         <button class="small" onclick="useInCalc('${r.id}')">帶入計算</button>
@@ -475,7 +481,7 @@ function useInCalc(id){
     toast('已帶入計算');
   }else{
     calcSel.recipeId = null;
-    toast('計算裡還沒有這個配方，可到「管理配方」新增');
+    toast('食譜庫裡還沒有這個配方，可到「管理食譜」新增');
   }
   setTab('furnace');
 }
@@ -484,7 +490,7 @@ function editLookbook(id){
   const r = id ? state.lookbook.find(x=>x.id===id) : {id:null,name:'',building:'',materials:[{name:'',qty:1}]};
   const matRows = r.materials.map((m,i)=>`
     <div class="mat-row" data-idx="${i}">
-      <input type="text" placeholder="食材名稱" class="m-name" value="${escapeHtml(m.name)}">
+      <input type="text" placeholder="材料名稱" class="m-name" value="${escapeHtml(m.name)}">
       <input type="number" class="qty m-qty" placeholder="數量" value="${m.qty}">
       <button class="small danger" onclick="this.parentElement.remove()">刪</button>
     </div>`).join('');
