@@ -25,7 +25,7 @@ let state = {
   tab: 'furnace',
   recipes: [],   // {id,name,time,inputQty,outputQty,fuels:[fuelName,...]}
   fuels: [],     // {id,name,seconds}  -- 一份燃料能持續燃燒幾秒
-  lookbook: [],  // {id,name,building,materials:[{name,qty}]}
+  lookbook: [],  // {id,name,category,building,materials:[{name,qty}],satiety,hydration,effect}
   markers: [],   // {id,name,cat,x,y,note}
   loaded:false
 };
@@ -115,6 +115,7 @@ function renderNav(){
         <img src="logo/logo-mark.svg" alt="貝雅工坊" width="26" height="26" style="border-radius:6px;flex:none;">
         貝雅工坊
       </div>
+      <div class="sub">烏托邦：起源 · 助手</div>
     </div>
     ${items}
     <div style="margin-top:auto;padding:16px 20px 0 20px;border-top:1px solid var(--border-soft);">
@@ -173,8 +174,7 @@ function renderFurnace(main){
     <div class="page-head">
       <div class="eyebrow">Furnace Calculator</div>
       <h1>熔爐計算</h1>
-      <p>選一個配方，輸入「放入的原料數量」或「想取得的成品數量」其中一格</p>
-      <p>另一格會自動幫你算出來，同時算出總時間跟燃料需求。</p>
+      <p>選一個配方，輸入「放入的原料數量」或「想取得的成品數量」其中一格，另一格會自動幫你算出來，同時算出總時間跟燃料需求。</p>
     </div>
 
     <div class="panel">
@@ -191,11 +191,11 @@ function renderFurnace(main){
       <h3>${escapeHtml(recipe.name)} <span class="tag copper">${recipe.time}秒／批</span><span class="tag steel">${recipe.inputQty}:${recipe.outputQty}</span></h3>
       <div class="row">
         <div class="field">
-          <label>放入的原料數量</label>
+          <label>你放入的原料數量</label>
           <input type="number" id="f_matqty" min="0" step="1" value="${calcSel.matQty}">
         </div>
         <div class="field">
-          <label>取得的成品數量</label>
+          <label>你想取得的成品數量</label>
           <input type="number" id="f_wantqty" min="0" step="1" value="${calcSel.wantQty}">
         </div>
         <div class="field">
@@ -430,19 +430,23 @@ async function saveFuelManager(){
 /* ================= TAB 2: 配方查詢 ================= */
 let lookbookQuery = '';
 
+const FOOD_CATEGORIES = ['吃的','喝的','飼料'];
+const COOKWARE = ['篝火','聖焰篝火','烹飪鍋'];
+const FOOD_EFFECTS = ['禦寒','耐熱','血量','攻擊','防禦','速度','耐力'];
+
 function renderLookbook(main){
   const filtered = state.lookbook.filter(r=> r.name.toLowerCase().includes(lookbookQuery.toLowerCase()) );
 
   main.innerHTML = `
     <div class="page-head">
-      <div class="eyebrow">Recipe Lookbook</div>
-      <h1食譜查詢</h1>
-      <p>把你在遊戲中發現的食譜記錄下來，之後直接搜尋查詢，或一鍵帶入</p>
+      <div class="eyebrow">Recipe Book</div>
+      <h1>食譜查詢</h1>
+      <p>把你在遊戲中發現的食譜記錄下來，之後直接搜尋查詢，或一鍵帶入熔爐計算機。</p>
     </div>
 
     <div class="panel">
       <div class="searchbar">
-        <input type="text" id="lb_search" placeholder="搜尋物品名稱…" value="${escapeHtml(lookbookQuery)}">
+        <input type="text" id="lb_search" placeholder="搜尋食譜名稱…" value="${escapeHtml(lookbookQuery)}">
         <button class="primary" onclick="editLookbook(null)">+ 新增食譜</button>
       </div>
       <div id="lookbookListWrap">${renderLookbookRows(filtered)}</div>
@@ -456,18 +460,24 @@ function renderLookbook(main){
 }
 
 function renderLookbookRows(filtered){
-  return filtered.length ? filtered.map(r=>`
+  return filtered.length ? filtered.map(r=>{
+    const effectBits = [];
+    if(r.satiety) effectBits.push(`飽足感 ${r.satiety}`);
+    if(r.hydration) effectBits.push(`水分 ${r.hydration}`);
+    if(r.effect) effectBits.push(r.effect);
+    return `
     <div class="list-row">
       <div class="main">
-        <div class="title">${escapeHtml(r.name)} ${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
-        <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}</div>
+        <div class="title">${escapeHtml(r.name)} ${r.category?`<span class="tag moss">${escapeHtml(r.category)}</span>`:''}${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
+        <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}${effectBits.length?`　·　${effectBits.map(escapeHtml).join('　')}`:''}</div>
       </div>
       <div class="acts">
         <button class="small" onclick="useInCalc('${r.id}')">帶入計算</button>
         <button class="small" onclick="editLookbook('${r.id}')">編輯</button>
         <button class="small danger" onclick="deleteLookbook('${r.id}')">刪除</button>
       </div>
-    </div>`).join('') : `<div class="empty">${state.lookbook.length? '找不到符合的食譜':'食譜庫是空的，新增第一筆食譜吧'}</div>`;
+    </div>`;
+  }).join('') : `<div class="empty">${state.lookbook.length? '找不到符合的食譜':'食譜庫是空的，新增第一筆食譜吧'}</div>`;
 }
 
 function useInCalc(id){
@@ -478,31 +488,45 @@ function useInCalc(id){
   if(match){
     calcSel.recipeId = match.id;
     calcSel.fuelName = null;
-    toast('已帶入計算');
+    toast('已帶入熔爐計算');
   }else{
     calcSel.recipeId = null;
-    toast('食譜庫裡還沒有這個配方，可到「管理食譜」新增');
+    toast('熔爐計算裡還沒有這個配方，可到「管理配方」新增');
   }
   setTab('furnace');
 }
 
 function editLookbook(id){
-  const r = id ? state.lookbook.find(x=>x.id===id) : {id:null,name:'',building:'',materials:[{name:'',qty:1}]};
+  const r = id ? state.lookbook.find(x=>x.id===id) : {id:null,name:'',category:FOOD_CATEGORIES[0],building:COOKWARE[0],materials:[{name:'',qty:1}],satiety:'',hydration:'',effect:''};
   const matRows = r.materials.map((m,i)=>`
     <div class="mat-row" data-idx="${i}">
       <input type="text" placeholder="材料名稱" class="m-name" value="${escapeHtml(m.name)}">
       <input type="number" class="qty m-qty" placeholder="數量" value="${m.qty}">
       <button class="small danger" onclick="this.parentElement.remove()">刪</button>
     </div>`).join('');
+  const catOptions = FOOD_CATEGORIES.map(c=>`<option value="${c}" ${r.category===c?'selected':''}>${c}</option>`).join('');
+  const cookOptions = COOKWARE.map(c=>`<option value="${c}" ${r.building===c?'selected':''}>${c}</option>`).join('');
+  const effectOptions = `<option value="">（無）</option>` + FOOD_EFFECTS.map(e=>`<option value="${e}" ${r.effect===e?'selected':''}>${e}</option>`).join('');
 
   showModal(`
     <h3>${id?'編輯食譜':'新增食譜'}</h3>
-    <div class="field"><label>成品名稱</label><input type="text" id="lb_name" value="${escapeHtml(r.name)}" placeholder="例如：小麥"></div>
-    <div class="field"><label>製作站（選填）</label><input type="text" id="lb_building" value="${escapeHtml(r.building||'')}" placeholder="例如：篝火、烹飪鍋"></div>
-    <label>所需食材</label>
+    <div class="row">
+      <div class="field"><label>成品名稱</label><input type="text" id="lb_name" value="${escapeHtml(r.name)}" placeholder="例如：烤全魚"></div>
+      <div class="field"><label>分類</label><select id="lb_category">${catOptions}</select></div>
+    </div>
+    <div class="field"><label>廚具</label><select id="lb_building">${cookOptions}</select></div>
+    <label>所需材料</label>
     <div id="matRows">${matRows}</div>
-    <button class="ghost small" style="margin-top:6px;" onclick="addMatRow()">+ 新增食材</button>
-    <div style="display:flex;gap:10px;margin-top:18px;">
+    <button class="ghost small" style="margin-top:6px;" onclick="addMatRow()">+ 新增材料</button>
+
+    <label style="margin-top:16px;">食品效果</label>
+    <div class="row">
+      <div class="field"><label>飽足感</label><input type="number" id="lb_satiety" min="0" value="${r.satiety}"></div>
+      <div class="field"><label>水分</label><input type="number" id="lb_hydration" min="0" value="${r.hydration}"></div>
+      <div class="field"><label>效果</label><select id="lb_effect">${effectOptions}</select></div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:6px;">
       <button class="primary" onclick="saveLookbook('${id||''}')">儲存</button>
       <button class="ghost" onclick="closeModal()">取消</button>
     </div>
@@ -512,7 +536,7 @@ function addMatRow(){
   const wrap = document.getElementById('matRows');
   const div = document.createElement('div');
   div.className='mat-row';
-  div.innerHTML = `<input type="text" placeholder="食材名稱" class="m-name">
+  div.innerHTML = `<input type="text" placeholder="材料名稱" class="m-name">
     <input type="number" class="qty m-qty" placeholder="數量" value="1">
     <button class="small danger" onclick="this.parentElement.remove()">刪</button>`;
   wrap.appendChild(div);
@@ -520,7 +544,11 @@ function addMatRow(){
 async function saveLookbook(id){
   const name = document.getElementById('lb_name').value.trim();
   if(!name){ toast('請填寫成品名稱'); return; }
-  const building = document.getElementById('lb_building').value.trim();
+  const category = document.getElementById('lb_category').value;
+  const building = document.getElementById('lb_building').value;
+  const satiety = document.getElementById('lb_satiety').value.trim();
+  const hydration = document.getElementById('lb_hydration').value.trim();
+  const effect = document.getElementById('lb_effect').value;
   const materials = [...document.querySelectorAll('#matRows .mat-row')].map(row=>({
     name: row.querySelector('.m-name').value.trim(),
     qty: parseFloat(row.querySelector('.m-qty').value)||1
@@ -528,9 +556,9 @@ async function saveLookbook(id){
 
   if(id){
     const r = state.lookbook.find(x=>x.id===id);
-    r.name=name; r.building=building; r.materials=materials;
+    Object.assign(r, {name,category,building,materials,satiety,hydration,effect});
   }else{
-    state.lookbook.push({id:uid(), name, building, materials});
+    state.lookbook.push({id:uid(), name, category, building, materials, satiety, hydration, effect});
   }
   await saveKey('lookbook', state.lookbook);
   closeModal(); toast('已儲存'); render();
