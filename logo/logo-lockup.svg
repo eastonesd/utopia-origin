@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 380">
+<defs>
+<linearGradient id="flameGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#ff8a4c"/>
+<stop offset="100%" stop-color="#c9522a"/>
+</linearGradient>
+<linearGradient id="potGrad" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#8f97a3"/>
+<stop offset="100%" stop-color="#5c626c"/>
+</linearGradient>
+</defs>
+<rect x="230" y="40" width="220" height="220" rx="28" fill="#17171a" stroke="#c98a4b" stroke-width="1.5"/>
+<rect x="290" y="216" width="100" height="7" rx="3.5" fill="#8a6238"/>
+<rect x="300" y="227" width="80" height="7" rx="3.5" fill="#586b52"/>
+<rect x="310" y="238" width="60" height="7" rx="3.5" fill="#c98a4b"/>
+<path d="M330,101 C317,120 313,143 330,158 C347,143 343,120 330,101 Z" fill="url(#flameGrad)" transform="translate(10,0)"/>
+<path d="M340,116 C334,128 332,144 340,153 C348,144 346,128 340,116 Z" fill="#ffcf9e"/>
+<rect x="335" y="86" width="10" height="10" rx="2" fill="#ff8a4c" transform="rotate(45 340 91)"/>
+<polygon points="300,163 380,163 356,209 324,209" fill="url(#potGrad)" stroke="#3a3d43" stroke-width="1"/>
+<circle cx="296" cy="170" r="6" fill="none" stroke="#8f97a3" stroke-width="3"/>
+<circle cx="384" cy="170" r="6" fill="none" stroke="#8f97a3" stroke-width="3"/>
+<text x="340" y="305" text-anchor="middle" font-family="Spectral, Georgia, serif" font-size="30" font-weight="700" fill="#eee8db" letter-spacing="2">貝雅工坊</text>
+<text x="340" y="330" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="13" fill="#9b968c" letter-spacing="3">UTOPIA ORIGIN COMPANION</text>
+</svg>
