@@ -434,6 +434,8 @@ let lookbookFilter = 'all';
 const FOOD_CATEGORIES = ['吃的','喝的','飼料'];
 const COOKWARE = ['篝火','聖焰篝火','烹飪鍋'];
 const FOOD_EFFECTS = ['禦寒','耐熱','血量','攻擊','防禦','速度','耐力'];
+const CATEGORY_TAG_CLASS = {'吃的':'food-eat','喝的':'food-drink','飼料':'food-feed'};
+const COOKWARE_TAG_CLASS = {'篝火':'cook-campfire','聖焰篝火':'cook-holyfire','烹飪鍋':'cook-pot'};
 
 function matchesLookbookQuery(r, query){
   const q = query.toLowerCase();
@@ -457,7 +459,7 @@ function renderLookbook(main){
     <div class="page-head">
       <div class="eyebrow">Recipe Book</div>
       <h1>食譜查詢</h1>
-      <p>把你在遊戲中發現的食譜記錄下來，可依名稱或食材關鍵字搜尋，也能依分類篩選，或一鍵帶入熔爐計算機。</p>
+      <p>把你在遊戲中發現的食譜記錄下來，可依名稱或食材關鍵字搜尋，也能依分類篩選</p>
     </div>
 
     <div class="panel">
@@ -485,7 +487,7 @@ function renderLookbookRows(filtered){
     return `
     <div class="list-row">
       <div class="main">
-        <div class="title">${escapeHtml(r.name)} ${r.category?`<span class="tag moss">${escapeHtml(r.category)}</span>`:''}${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
+        <div class="title">${escapeHtml(r.name)} ${r.category?`<span class="tag ${CATEGORY_TAG_CLASS[r.category]||'moss'}">${escapeHtml(r.category)}</span>`:''}${r.building?`<span class="tag ${COOKWARE_TAG_CLASS[r.building]||'steel'}">${escapeHtml(r.building)}</span>`:''}</div>
         <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}${effectBits.length?`　·　${effectBits.map(escapeHtml).join('　')}`:''}</div>
       </div>
       <div class="acts">
@@ -505,10 +507,10 @@ function useInCalc(id){
   if(match){
     calcSel.recipeId = match.id;
     calcSel.fuelName = null;
-    toast('已帶入熔爐計算');
+    toast('已帶入計算');
   }else{
     calcSel.recipeId = null;
-    toast('熔爐計算裡還沒有這個配方，可到「管理配方」新增');
+    toast('食譜庫裡還沒有這個配方，可到「食譜查詢」新增');
   }
   setTab('furnace');
 }

@@ -164,6 +164,14 @@
   .tag.steel{background:rgba(146,160,179,0.15);color:var(--steel);}
   .tag.moss{background:rgba(124,148,115,0.18);color:#a3c397;}
   .tag.copper{background:rgba(201,138,75,0.16);color:var(--copper);}
+  /* 食譜分類：吃的＝篝火藍、喝的＝原本的綠、飼料＝牛皮紙色 */
+  .tag.food-eat{background:rgba(146,160,179,0.15);color:var(--steel);}
+  .tag.food-drink{background:rgba(124,148,115,0.18);color:#a3c397;}
+  .tag.food-feed{background:rgba(196,160,110,0.18);color:#d9b98a;}
+  /* 廚具：篝火＝淡橘、聖焰篝火＝薰衣草紫、烹飪鍋＝布魯克林灰 */
+  .tag.cook-campfire{background:rgba(217,119,87,0.18);color:#e39774;}
+  .tag.cook-holyfire{background:rgba(168,146,214,0.18);color:#b6a3e0;}
+  .tag.cook-pot{background:rgba(140,148,158,0.18);color:#a3aab2;}
 
   .empty{
     text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13.5px;
