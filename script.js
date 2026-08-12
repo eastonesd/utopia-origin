@@ -92,6 +92,7 @@ const LOOKBOOK_BASE = [
   {name:'烤鰻魚', mat:'鰻魚', satiety:30},
   {name:'烤鮫魚', mat:'鮫魚', satiety:30},
   {name:'烤桂魚', mat:'桂魚', satiety:30},
+  {name:'炒瓜子', mat:'向日葵種子', satiety:10, hydration:-5},
 ];
 
 function buildDefaultLookbook(){
@@ -102,6 +103,7 @@ function buildDefaultLookbook(){
         ? (d.name.startsWith('烤') ? '聖焰'+d.name.slice(1) : '聖焰'+d.name)
         : d.name;
       out.push({
+        id: uid(),
         name,
         category: '吃的',
         building,
@@ -149,6 +151,20 @@ async function init(){
     state.lookbook = state.lookbook.concat(buildDefaultLookbook());
     await saveKey('lookbook', state.lookbook);
     await saveKey('lookbookSeedV1', true);
+  }
+
+  // 修復：幫任何缺少 id 的既有資料補上 id（避免編輯/刪除按鈕失效）
+  let healed = false;
+  for(const list of [state.recipes, state.fuels, state.lookbook, state.markers]){
+    for(const item of list){
+      if(!item.id){ item.id = uid(); healed = true; }
+    }
+  }
+  if(healed){
+    await saveKey('recipes', state.recipes);
+    await saveKey('fuels', state.fuels);
+    await saveKey('lookbook', state.lookbook);
+    await saveKey('markers', state.markers);
   }
 
   state.loaded = true;
