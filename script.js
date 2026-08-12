@@ -429,35 +429,54 @@ async function saveFuelManager(){
 
 /* ================= TAB 2: 配方查詢 ================= */
 let lookbookQuery = '';
+let lookbookFilter = 'all';
 
 const FOOD_CATEGORIES = ['吃的','喝的','飼料'];
 const COOKWARE = ['篝火','聖焰篝火','烹飪鍋'];
 const FOOD_EFFECTS = ['禦寒','耐熱','血量','攻擊','防禦','速度','耐力'];
+const CATEGORY_TAG_CLASS = {'吃的':'food-eat','喝的':'food-drink','飼料':'food-feed'};
+const COOKWARE_TAG_CLASS = {'篝火':'cook-campfire','聖焰篝火':'cook-holyfire','烹飪鍋':'cook-pot'};
+
+function matchesLookbookQuery(r, query){
+  const q = query.toLowerCase();
+  if(!q) return true;
+  if(r.name.toLowerCase().includes(q)) return true;
+  return r.materials.some(m=>m.name.toLowerCase().includes(q));
+}
+function filterLookbook(){
+  return state.lookbook.filter(r=>
+    (lookbookFilter==='all'||r.category===lookbookFilter) &&
+    matchesLookbookQuery(r, lookbookQuery)
+  );
+}
 
 function renderLookbook(main){
-  const filtered = state.lookbook.filter(r=> r.name.toLowerCase().includes(lookbookQuery.toLowerCase()) );
+  const filtered = filterLookbook();
+  const filterBtns = `<button class="filterbtn ${lookbookFilter==='all'?'active':''}" onclick="setLookbookFilter('all')">全部</button>` +
+    FOOD_CATEGORIES.map(c=>`<button class="filterbtn ${lookbookFilter===c?'active':''}" onclick="setLookbookFilter('${c}')">${c}</button>`).join('');
 
   main.innerHTML = `
     <div class="page-head">
       <div class="eyebrow">Recipe Book</div>
       <h1>食譜查詢</h1>
-      <p>把你在遊戲中發現的食譜記錄下來，之後直接搜尋查詢，或一鍵帶入熔爐計算機。</p>
+      <p>把你在遊戲中發現的食譜記錄下來，可依名稱或食材關鍵字搜尋，也能依分類篩選</p>
     </div>
 
     <div class="panel">
       <div class="searchbar">
-        <input type="text" id="lb_search" placeholder="搜尋食譜名稱…" value="${escapeHtml(lookbookQuery)}">
+        <input type="text" id="lb_search" placeholder="搜尋食譜名稱或食材…" value="${escapeHtml(lookbookQuery)}">
         <button class="primary" onclick="editLookbook(null)">+ 新增食譜</button>
       </div>
+      <div class="filterbar">${filterBtns}</div>
       <div id="lookbookListWrap">${renderLookbookRows(filtered)}</div>
     </div>
   `;
   document.getElementById('lb_search').oninput = e=>{
     lookbookQuery = e.target.value;
-    const list = state.lookbook.filter(r=> r.name.toLowerCase().includes(lookbookQuery.toLowerCase()) );
-    document.getElementById('lookbookListWrap').innerHTML = renderLookbookRows(list);
+    document.getElementById('lookbookListWrap').innerHTML = renderLookbookRows(filterLookbook());
   };
 }
+function setLookbookFilter(c){ lookbookFilter=c; render(); }
 
 function renderLookbookRows(filtered){
   return filtered.length ? filtered.map(r=>{
@@ -468,7 +487,7 @@ function renderLookbookRows(filtered){
     return `
     <div class="list-row">
       <div class="main">
-        <div class="title">${escapeHtml(r.name)} ${r.category?`<span class="tag moss">${escapeHtml(r.category)}</span>`:''}${r.building?`<span class="tag steel">${escapeHtml(r.building)}</span>`:''}</div>
+        <div class="title">${escapeHtml(r.name)} ${r.category?`<span class="tag ${CATEGORY_TAG_CLASS[r.category]||'moss'}">${escapeHtml(r.category)}</span>`:''}${r.building?`<span class="tag ${COOKWARE_TAG_CLASS[r.building]||'steel'}">${escapeHtml(r.building)}</span>`:''}</div>
         <div class="sub">${r.materials.map(m=>`${escapeHtml(m.name)} ×${m.qty}`).join('　')||'（尚未填寫材料）'}${effectBits.length?`　·　${effectBits.map(escapeHtml).join('　')}`:''}</div>
       </div>
       <div class="acts">
@@ -488,10 +507,10 @@ function useInCalc(id){
   if(match){
     calcSel.recipeId = match.id;
     calcSel.fuelName = null;
-    toast('已帶入熔爐計算');
+    toast('已帶入計算');
   }else{
     calcSel.recipeId = null;
-    toast('熔爐計算裡還沒有這個配方，可到「管理配方」新增');
+    toast('食譜庫裡還沒有這個配方，可到「食譜查詢」新增');
   }
   setTab('furnace');
 }
@@ -505,7 +524,7 @@ function editLookbook(id){
       <button class="small danger" onclick="this.parentElement.remove()">刪</button>
     </div>`).join('');
   const catOptions = FOOD_CATEGORIES.map(c=>`<option value="${c}" ${r.category===c?'selected':''}>${c}</option>`).join('');
-  const cookOptions = COOKWARE.map(c=>`<option value="${c}" ${r.building===c?'selected':''}>${c}</option>`).join('');
+  const cookButtons = COOKWARE.map(c=>`<span class="recipe-chip ${r.building===c?'active':''}" data-val="${c}" onclick="selectCookware(this)">${c}</span>`).join('');
   const effectOptions = `<option value="">（無）</option>` + FOOD_EFFECTS.map(e=>`<option value="${e}" ${r.effect===e?'selected':''}>${e}</option>`).join('');
 
   showModal(`
@@ -514,7 +533,7 @@ function editLookbook(id){
       <div class="field"><label>成品名稱</label><input type="text" id="lb_name" value="${escapeHtml(r.name)}" placeholder="例如：烤全魚"></div>
       <div class="field"><label>分類</label><select id="lb_category">${catOptions}</select></div>
     </div>
-    <div class="field"><label>廚具</label><select id="lb_building">${cookOptions}</select></div>
+    <div class="field"><label>廚具</label><div id="lb_building_group">${cookButtons}</div><input type="hidden" id="lb_building" value="${escapeHtml(r.building)}"></div>
     <label>所需材料</label>
     <div id="matRows">${matRows}</div>
     <button class="ghost small" style="margin-top:6px;" onclick="addMatRow()">+ 新增材料</button>
@@ -531,6 +550,12 @@ function editLookbook(id){
       <button class="ghost" onclick="closeModal()">取消</button>
     </div>
   `);
+}
+function selectCookware(el){
+  const group = document.getElementById('lb_building_group');
+  group.querySelectorAll('.recipe-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('lb_building').value = el.dataset.val;
 }
 function addMatRow(){
   const wrap = document.getElementById('matRows');
