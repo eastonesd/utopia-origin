@@ -62,6 +62,59 @@ const DEFAULT_RECIPES = [
   {name:'海獸骸骨', time:420, inputQty:1, outputQty:50, fuels:['魔晶']},
 ];
 
+const LOOKBOOK_BASE = [
+  {name:'烤雞腿', mat:'生雞腿', satiety:30},
+  {name:'烤豬排', mat:'生豬排', satiety:50, hydration:-10},
+  {name:'烤羊排', mat:'生羊排', satiety:40, hydration:-10},
+  {name:'烤牛排', mat:'生牛排', satiety:40, hydration:-10},
+  {name:'烤野味', mat:'野味肉塊', satiety:30, hydration:-10},
+  {name:'烤雞蛋', mat:'生雞蛋', satiety:20, effect:'血量'},
+  {name:'烤玉米', mat:'玉米', satiety:20, hydration:-5},
+  {name:'烤蘑菇', mat:'蘑菇', satiety:10, hydration:-5},
+  {name:'烤土豆', mat:'土豆', satiety:15, hydration:-10},
+  {name:'烤南瓜', mat:'南瓜', satiety:15, hydration:-10},
+  {name:'烤香蕉', mat:'香蕉', satiety:10},
+  {name:'烤蘋果', mat:'蘋果', satiety:10},
+  {name:'烤辣椒', mat:'辣椒'},
+  {name:'烤龜蛋', mat:'龜蛋', satiety:30, hydration:-10},
+  {name:'烤洋蔥', mat:'洋蔥', satiety:10},
+  {name:'烤筍尖', mat:'竹筍', satiety:10},
+  {name:'烤青椒', mat:'青椒', satiety:5},
+  {name:'烤章魚', mat:'章魚', satiety:30, hydration:-10},
+  {name:'烤大扇貝', mat:'大扇貝', satiety:20},
+  {name:'烤小扇貝', mat:'小扇貝', satiety:10},
+  {name:'烤帶魚', mat:'帶魚', satiety:30},
+  {name:'烤三文魚', mat:'三文魚', satiety:30},
+  {name:'烤金槍魚', mat:'金槍魚', satiety:30},
+  {name:'烤紅鯉魚', mat:'紅鯉魚', satiety:30},
+  {name:'烤綠鯉魚', mat:'綠鯉魚', satiety:30},
+  {name:'烤綠鱸魚', mat:'綠鱸魚', satiety:30},
+  {name:'烤鰻魚', mat:'鰻魚', satiety:30},
+  {name:'烤鮫魚', mat:'鮫魚', satiety:30},
+  {name:'烤桂魚', mat:'桂魚', satiety:30},
+];
+
+function buildDefaultLookbook(){
+  const out = [];
+  for(const building of ['篝火','聖焰篝火']){
+    for(const d of LOOKBOOK_BASE){
+      const name = building==='聖焰篝火'
+        ? (d.name.startsWith('烤') ? '聖焰'+d.name.slice(1) : '聖焰'+d.name)
+        : d.name;
+      out.push({
+        name,
+        category: '吃的',
+        building,
+        materials: [{name:d.mat, qty:1}],
+        satiety: d.satiety!==undefined ? String(d.satiety) : '',
+        hydration: d.hydration!==undefined ? String(d.hydration) : '',
+        effect: d.effect || ''
+      });
+    }
+  }
+  return out;
+}
+
 const CATS = [
   {id:'ore',label:'礦石／礦脈',cls:'cat-ore'},
   {id:'plant',label:'植物／草藥',cls:'cat-plant'},
@@ -89,6 +142,13 @@ async function init(){
       await saveKey('recipes', state.recipes);
     }
     await saveKey('schemaVersion', SCHEMA_VERSION);
+  }
+
+  const lookbookSeeded = await loadKey('lookbookSeedV1', false);
+  if(!lookbookSeeded){
+    state.lookbook = state.lookbook.concat(buildDefaultLookbook());
+    await saveKey('lookbook', state.lookbook);
+    await saveKey('lookbookSeedV1', true);
   }
 
   state.loaded = true;
@@ -133,7 +193,7 @@ function renderNav(){
 }
 async function resetAllData(){
   if(!confirm('確定要清除所有配方、燃料設定與地圖標記嗎？此動作無法復原。')) return;
-  ['recipes','fuels','lookbook','markers','schemaVersion'].forEach(k=>localStorage.removeItem(STORAGE_PREFIX+k));
+  ['recipes','fuels','lookbook','markers','schemaVersion','lookbookSeedV1'].forEach(k=>localStorage.removeItem(STORAGE_PREFIX+k));
   location.reload();
 }
 function setTab(t){ state.tab=t; render(); }
@@ -541,7 +601,7 @@ function editLookbook(id){
     <label style="margin-top:16px;">食品效果</label>
     <div class="row">
       <div class="field"><label>飽足感</label><input type="number" id="lb_satiety" min="0" value="${r.satiety}"></div>
-      <div class="field"><label>水分</label><input type="number" id="lb_hydration" min="0" value="${r.hydration}"></div>
+      <div class="field"><label>水分</label><input type="number" id="lb_hydration" value="${r.hydration}"></div>
       <div class="field"><label>效果</label><select id="lb_effect">${effectOptions}</select></div>
     </div>
 
