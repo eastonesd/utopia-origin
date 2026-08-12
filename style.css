@@ -172,6 +172,7 @@
   .tag.cook-campfire{background:rgba(217,119,87,0.18);color:#e39774;}
   .tag.cook-holyfire{background:rgba(168,146,214,0.18);color:#b6a3e0;}
   .tag.cook-pot{background:rgba(140,148,158,0.18);color:#a3aab2;}
+  .tag.cook-caldron{background:rgba(45,110,74,0.22);color:#5fbf88;}
 
   .empty{
     text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13.5px;
@@ -197,7 +198,7 @@
 
   /* map */
   .map-area{
-    position:relative;width:100%;aspect-ratio:1600/1656;border-radius:6px;overflow:hidden;
+    position:relative;width:100%;aspect-ratio:2616/2709;border-radius:6px;overflow:hidden;
     border:1px solid var(--border);cursor:crosshair;
     background:url('map-assets/map-bg.jpg') center/cover no-repeat, var(--bg-inset);
   }
