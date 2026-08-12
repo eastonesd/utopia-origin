@@ -593,7 +593,7 @@ function renderMap(main){
     <div class="page-head">
       <div class="eyebrow">Resource Map</div>
       <h1>地圖標記</h1>
-      <p>這是一張自由座標圖，不是遊戲實際地圖 — 直接點擊來標出資源點的相對位置，方便自己記錄與查找。</p>
+      <p>直接點擊地圖上的位置來標出資源點，方便自己記錄與查找。</p>
     </div>
 
     <div class="panel">

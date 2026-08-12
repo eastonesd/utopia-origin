@@ -164,6 +164,14 @@
   .tag.steel{background:rgba(146,160,179,0.15);color:var(--steel);}
   .tag.moss{background:rgba(124,148,115,0.18);color:#a3c397;}
   .tag.copper{background:rgba(201,138,75,0.16);color:var(--copper);}
+  /* 食譜分類：吃的＝篝火藍、喝的＝原本的綠、飼料＝牛皮紙色 */
+  .tag.food-eat{background:rgba(146,160,179,0.15);color:var(--steel);}
+  .tag.food-drink{background:rgba(124,148,115,0.18);color:#a3c397;}
+  .tag.food-feed{background:rgba(196,160,110,0.18);color:#d9b98a;}
+  /* 廚具：篝火＝淡橘、聖焰篝火＝薰衣草紫、烹飪鍋＝布魯克林灰 */
+  .tag.cook-campfire{background:rgba(217,119,87,0.18);color:#e39774;}
+  .tag.cook-holyfire{background:rgba(168,146,214,0.18);color:#b6a3e0;}
+  .tag.cook-pot{background:rgba(140,148,158,0.18);color:#a3aab2;}
 
   .empty{
     text-align:center;padding:30px 10px;color:var(--text-faint);font-size:13.5px;
@@ -189,14 +197,9 @@
 
   /* map */
   .map-area{
-    position:relative;width:100%;aspect-ratio:16/10;border-radius:6px;overflow:hidden;
+    position:relative;width:100%;aspect-ratio:1600/1656;border-radius:6px;overflow:hidden;
     border:1px solid var(--border);cursor:crosshair;
-    background:
-      linear-gradient(rgba(124,148,115,0.05) 1px, transparent 1px) 0 0/40px 40px,
-      linear-gradient(90deg, rgba(124,148,115,0.05) 1px, transparent 1px) 0 0/40px 40px,
-      radial-gradient(ellipse at 30% 20%, rgba(124,148,115,0.10), transparent 55%),
-      radial-gradient(ellipse at 75% 70%, rgba(146,160,179,0.08), transparent 55%),
-      var(--bg-inset);
+    background:url('map-assets/map-bg.jpg') center/cover no-repeat, var(--bg-inset);
   }
   .map-area .hint{
     position:absolute;bottom:10px;right:12px;font-size:11px;color:var(--text-faint);

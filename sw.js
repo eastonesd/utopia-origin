@@ -6,6 +6,7 @@ const APP_SHELL = [
   './script.js',
   './manifest.json',
   './logo/logo-mark.svg',
+  './map-assets/map-bg.jpg',
   './logo/icon-192.png',
   './logo/icon-512.png'
 ];
