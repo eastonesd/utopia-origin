@@ -33,6 +33,7 @@ let state = {
 const SCHEMA_VERSION = 2;
 
 const DEFAULT_FUELS = [
+  {name:'樹葉', seconds:60},
   {name:'茅草', seconds:60},
   {name:'煤炭', seconds:180},
   {name:'蒸氣石', seconds:300},
@@ -51,6 +52,7 @@ const DEFAULT_RECIPES = [
   {name:'黑曜石', time:30, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
   {name:'瓦雷亞石', time:35, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
   {name:'深海鋼錠', time:30, inputQty:2, outputQty:1, fuels:['茅草','煤炭']},
+  {name:'蠶絲', time:20, inputQty:1, outputQty:1, fuels:['樹葉']},
   {name:'精煉鋼鐵', time:90, inputQty:10, outputQty:1, fuels:['蒸氣石']},
   {name:'精煉橡膠', time:90, inputQty:10, outputQty:1, fuels:['蒸氣石']},
   {name:'精煉煤炭', time:90, inputQty:10, outputQty:1, fuels:['蒸氣石']},
