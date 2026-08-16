@@ -4,6 +4,7 @@ const APP_SHELL = [
   './index.html',
   './style.css',
   './script.js',
+  './recipes-data.js',
   './manifest.json',
   './logo/logo-mark.svg',
   './map-assets/map-bg.jpg',

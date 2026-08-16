@@ -237,6 +237,13 @@
     background:transparent;color:var(--text-dim);cursor:pointer;
   }
   .filterbtn.active{border-color:var(--moss);color:#a3c397;background:rgba(124,148,115,0.1);}
+  .filterbtn.active.food-eat{border-color:var(--steel);color:var(--steel);background:rgba(146,160,179,0.15);}
+  .filterbtn.active.food-drink{border-color:var(--moss);color:#a3c397;background:rgba(124,148,115,0.18);}
+  .filterbtn.active.food-feed{border-color:#c4a06e;color:#d9b98a;background:rgba(196,160,110,0.18);}
+  .filterbtn.active.cook-campfire{border-color:#d97757;color:#e39774;background:rgba(217,119,87,0.18);}
+  .filterbtn.active.cook-holyfire{border-color:#a892d6;color:#b6a3e0;background:rgba(168,146,214,0.18);}
+  .filterbtn.active.cook-pot{border-color:#8c949e;color:#a3aab2;background:rgba(140,148,158,0.18);}
+  .filterbtn.active.cook-caldron{border-color:#2d6e4a;color:#5fbf88;background:rgba(45,110,74,0.22);}
 
   .toast{
     position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);
