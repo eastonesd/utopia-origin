@@ -246,11 +246,11 @@ function renderFurnace(main){
       <h3>${escapeHtml(recipe.name)} <span class="tag copper">${recipe.time}秒／批</span><span class="tag steel">${recipe.inputQty}:${recipe.outputQty}</span></h3>
       <div class="row">
         <div class="field">
-          <label>你放入的原料數量</label>
+          <label>放入的原料數量</label>
           <input type="number" id="f_matqty" min="0" step="1" value="${calcSel.matQty}">
         </div>
         <div class="field">
-          <label>你想取得的成品數量</label>
+          <label>取得的成品數量</label>
           <input type="number" id="f_wantqty" min="0" step="1" value="${calcSel.wantQty}">
         </div>
         <div class="field">
